@@ -9,7 +9,6 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceRoot}/www/firstproject/manage.py",
-            "python":"C:/Users/wei/.virtualenvs/www230703-nE2G_IjJ/Scripts/python.exe",
             "args": [
                 "runserver",
             ],
