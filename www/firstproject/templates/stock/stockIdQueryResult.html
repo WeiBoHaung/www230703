@@ -1,0 +1,35 @@
+
+{% load arithmetic %}
+
+<head>
+
+<style>
+
+.td_align_right{
+text-align:right;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<H1> {{data.0.2}} {{data.0.2|code2name:0}} 個股資料顯示</H1>
+{% if data%}
+<TABLE BORDER="1">
+	<TR> <TH>日期</TH> <TH>開盤價</TH><TH>最高</TH><TH>最低</TH><TH>收盤價</TH><TH>成交量</TH></TR>
+	{%for i in data %}
+		<TR> 
+			<TD>{{i.1|date2str:0}}</TD>  <TD class="td_align_right">{{i.3}}</TD>
+			<TD class="td_align_right">{{i.4}}</TD> <TD class="td_align_right">{{i.5}}</TD> 
+			<TD class="td_align_right">{{i.6}}</TD> <TD class="td_align_right">{{i.7}}</TD>
+		</TR>
+	{%endfor %}
+	
+</TABLE>	
+{% else %}
+	查無資料
+{% endif %}
+
+</body>

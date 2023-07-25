@@ -1,0 +1,18 @@
+		<TR> 
+			<TD>{{i.1}}</TD> <TD>{{i.2}} </TD> <TD>{{i.3}} </TD>
+			<TD>{{i.4}}</TD> <TD>{{i.5}} </TD> <TD>{{i.6}} </TD>
+			<TD>{{i.7}}</TD>
+		</TR>
+		
+		
+		{% if data%}
+<TABLE BORDER="1">
+	<TR> <TH>日期</TH> <TH>股票代號</TH><TH>開盤價</TH><TH>最高</TH><TH>最低</TH><TH>收盤價</TH><TH>成交量</TH></TR>
+	{%for i in data %}
+{{i}}
+	{%endfor %}
+	
+</TABLE>	
+{% else %}
+	查無資料
+{% endif %}

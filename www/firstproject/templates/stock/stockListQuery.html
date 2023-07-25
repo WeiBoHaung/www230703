@@ -1,0 +1,23 @@
+<!-- {{data}} -->
+
+<body>
+
+<h1> 股票列表</h1>
+
+<table border="1">
+
+<tr>  <th>股票編碼</th>  <th>股票名稱</th> <th>產業分類</th> </tr>
+
+{% for stock in data %}
+	<tr> 
+		<td>{{ forloop.counter }}</td>
+		
+		<td><a href="/stockIdQuery/{{stock.1}}">{{stock.1}}</a> </td> 
+		<td><a href="/stockIdQuery/{{stock.1}}">{{stock.2}}</a></td> 
+		<td>{{stock.3}} </td> 
+	</tr>
+{% endfor %}
+
+</table>
+
+</body>

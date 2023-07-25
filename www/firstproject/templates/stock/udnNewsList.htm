@@ -1,0 +1,38 @@
+<html>
+{% load arithmetic %}
+
+<head>
+
+</head>
+
+<body>
+
+{{"book"|str_concat:"good"}}
+
+<h1>聯合新聞查詢</h1>
+<TABLE border="2">
+	<tr >
+		<th width="50px">項次</th>  <th width="700px">標題</th>
+		<th width="300px">網址</th> <th width="200px">日期</th>
+	</tr>
+	
+{%for i in news%}
+	{%if forloop.counter0|get_mod:3 == 0%}
+	
+		<tr style="background-color:pink;">
+	{%elif forloop.counter0|get_mod:3 == 1%}
+		<tr style="background-color:yellow;">	
+	{%else%}
+		<tr style="background-color:orange;">
+	{%endif%}
+			<td> {{forloop.counter|get_divide:3}}  </td> <td>{{i.title}}</td>
+			<td>{{i.url}}</td>              <td>{{i.date}} </td>
+		</tr>
+{%endfor%}
+
+</TABLE>
+
+</body>
+
+
+</html> 

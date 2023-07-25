@@ -1,0 +1,1 @@
+python C:\Users\user\Desktop\www\firstproject\manage.py runserver 0.0.0.0:8000
