@@ -1,0 +1,158 @@
+<html>
+
+<head>
+    {% load static %}
+    <title>我的網頁</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/stocktools/gui.css">
+    <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/annotations/popup.css">
+</head>
+
+<body>
+
+    <form class="container" action="{% url 'stockChart' %}" method="POST">
+        {% csrf_token %}
+        <h1 class="p-2 text-center">查詢股價</h1>
+        <p class="text-center">
+            天零零地零零台股快歸零
+        </p>
+        <h4>輸入你的資料吧</h4>
+        <div class="row">
+            <div class="mb-3 col-md-12">
+                <input class="form-control" name="stockID" id="exampleInputEmail1">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary col-md-12 ">查詢</button>
+    </form>
+
+    <div class="container pt-3" id="container" style="width:100%; height:400px;">
+
+    </div>
+
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/stock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/indicators-all.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
+    <script src="https://code.highcharts.com/modules/annotations-advanced.js"></script>
+    <script src="https://code.highcharts.com/modules/price-indicator.js"></script>
+    <script src="https://code.highcharts.com/modules/full-screen.js"></script>
+    <script src="https://code.highcharts.com/modules/stock-tools.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/heikinashi.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/hollowcandlestick.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+    <script>
+        (async () => {
+            const stockData = [
+            {% for price in stockData %}
+            [
+                {{ price.date}},
+                {{ price.open}},
+                {{ price.high}},
+                {{ price.low}},
+                {{ price.close}}
+            ],
+            {% endfor %}
+        ];
+            console.log(stockData,typeof stockData[0][1]);
+
+            // 建立hightchart
+            Highcharts.stockChart('container', {
+                rangeSelector: {
+                    buttons: [{
+                        type: 'month',
+                        count: 1,
+                        text: '1個月',
+                        events: {
+                            click: function () {
+                                alert('Clicked button');
+                            }
+                        }
+                    }, {
+                        type: 'month',
+                        count: 3,
+                        text: '3個月'
+                    }, {
+                        type: 'month',
+                        count: 6,
+                        text: '6個月'
+                    }, {
+                        type: 'ytd',
+                        text: 'YTD'
+                    }, {
+                        type: 'year',
+                        count: 1,
+                        text: '1年'
+                    }, {
+                        type: 'all',
+                        text: '全部'
+                    }],
+                    inputDateFormat: '%b %e, %Y %H:%M',
+                    selected: 1,
+
+                },
+
+                title: {
+                    text: '{{stockID}}'
+                },
+                // 配置 Stock Tools
+                stockTools: {
+                    gui: {
+                        buttons: ['indicators', 'simpleShapes', 'lines', 'crookedLines', 'measure', 'zoomChange', 'fullScreen', 'toggleAnnotations']
+                    }
+                },
+                series: [
+                    {
+                        name: 'AAPL',
+                        data: stockData,
+                        type: 'candlestick',
+                        tooltip: {
+                            valueDecimals: 2
+                        }
+                    }, {
+                        type: 'flags',
+                        accessibility: {
+                            exposeAsGroupOnly: true,
+                            description: 'Flagged events.'
+                        },
+                        data: [
+                            {
+                                x: 1639578600000,
+                                y: 179.3,
+                                title: 'A',
+                                text: 'Some event with a description'
+                            }, {
+                                x: Date.UTC(2022, 11, 15),
+                                y: 142.16,
+                                title: 'B',
+                                text: 'Some event with a description'
+                            }, {
+                                x: Date.UTC(2022, 11, 22),
+                                y: 200,
+                                title: 'C',
+                                text: 'Some event with a description'
+                            }
+                        ],
+                        onSeries: 'dataseries',
+                        shape: 'circlepin',
+                        width: 16
+                    },
+
+                ],
+                plotOptions: {
+                    candlestick: {
+                        color: 'red',
+                        upColor: 'green'
+                    }
+                },
+            });
+        })();
+    </script>
+</body>
+
+</html>

@@ -7,7 +7,10 @@ from stockapp.views import *
 from mysite import views as mysiteViews
 
 myUrlPatterns=[
-    path('',mysiteViews.homePage)
+    path('/',mysiteViews.homePage),
+
+    path('/datatable',mysiteViews.datatable,name='datatable'),
+    path('/stockChart',mysiteViews.stockChart,name='stockChart')
 ]
 urlpatterns = [
     #test data only
@@ -23,5 +26,5 @@ urlpatterns = [
     url(r'^stockIdQuery/$', stockIdQuery), #POST
     
     url(r'^test/$', test),   
-    path('mysite/',include(myUrlPatterns)),
+    path('mysite',include(myUrlPatterns)),
 ]

@@ -1,7 +1,7 @@
 from django.shortcuts import render  
 from django.http import HttpResponse 
 from django.shortcuts import redirect
-
+from datetime import datetime
 import json
 import requests
 import pymysql 
@@ -100,6 +100,9 @@ def udn_query(r):
             return HttpResponse("<h1>pass</h1>")
 
 def getStockListQuery():
+    '''
+    取得股市列表類別
+    '''
     db = pymysql.connect(host="127.0.0.1", user="hsf",passwd="12345",database="stock",charset='utf8')
     cursor = db.cursor() 
 
@@ -110,3 +113,25 @@ def getStockListQuery():
 
     db.close()
     return data
+
+def getStockDailyExchange(no):
+    '''
+    取得股市所有資料
+    '''
+    db = pymysql.connect(host="127.0.0.1", user="hsf",passwd="12345",database="stock",charset='utf8')
+    cursor = db.cursor() 
+    
+    cmd="select *, DATE_FORMAT(date, '%Y-%m-%d') AS date_str from stock_daily_exchange where no='{}'".format(no)
+
+    cursor.execute(cmd)
+    db.commit()
+    results_tuples =cursor.fetchall()
+    db.close()
+    # tuple轉字典
+    results_list = list(map(lambda row: {"date": row[8], "open": row[3],"high": row[4],"low": row[4],"close": row[5] }, results_tuples))
+    # 把日期字串轉毫秒
+    for price in results_list:
+        dt_object = datetime.strptime(price['date'], '%Y-%m-%d')
+        price['date']= int(dt_object.timestamp() * 1000)
+
+    return results_list

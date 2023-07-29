@@ -1,0 +1,76 @@
+<html>
+
+<head>
+    {% load static %}
+    <title>我的網頁</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.css" />
+
+</head>
+
+<body>
+
+    <div class="container pt-3">
+        <table id="myTable">
+
+        </table>
+    </div>
+    
+    
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js"></script>
+    
+    <script>
+
+        $(document).ready(function() {
+            var stockData=[
+            {% for stockData in allStockData %}
+            {
+                'no':"{{stockData.0}}",
+                'id':"{{stockData.1}}",
+                'name':"{{stockData.2}}",
+                'type':"{{stockData.3}}",
+            },
+            {% endfor %}
+            ];
+           
+            $('#myTable').DataTable({
+                data:stockData,
+                columns: [ 
+                    { data: 'no', title: "id" , class:"col-2"},
+                    { data: 'id', title: "編號" },
+                    { data: 'name', title: "名稱" ,class:"col-2" },
+                    { data: 'type', title: "類別" ,class:"col-2" },
+        
+                ],
+                columnDefs: [
+                    {
+                        "targets": 1,
+                        "render": function (data, type, full, meta) {
+                            let link="<a href='/stockIdQuery/"+full.id+"'>"+data+"</a>";
+                            return link
+                        }
+                    },{
+                        "targets": 2,
+                        "render": function (data, type, full, meta) {
+                            let link="<a href='/stockIdQuery/"+full.id+"'>"+data+"</a>";
+                            return link
+                        }
+                    },{
+                        "targets": -1,
+                        "render": function (data) {
+                            let button='<button type="button" class="btn btn-primary" onclick="alert(\''+data+'\')" >查詢</button>';
+                            return button
+                        }
+                    },
+                ],
+            });
+        });
+    </script>
+</body>
+
+</html>
